@@ -59,7 +59,7 @@ pipeline {
 
         stage('Build and Deploy on Docker') {
             steps {
-                withMaven(maven '3.8.1') {
+                withMaven(maven 'apache-maven-3.8.1') {
                     sh "mvn clean verify"
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }

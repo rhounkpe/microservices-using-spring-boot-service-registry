@@ -1,10 +1,10 @@
 pipeline {
-    /*
     https://www.youtube.com/watch?v=HaGeSq-SB9E&ab_channel=SzymonStepniak
     environment {
         JAVA_TOOL_OPTIONS = '-Duser.home=/var/maven'
     }
 
+    /*
     agent {
         docker {
             image 'maven:3.8.1-jdk-11'
@@ -51,6 +51,13 @@ pipeline {
         }
 
         stage('Unit Testing') {
+            agent {
+                docker {
+                    image 'maven:3.8.1-adoptopenjdk-11'
+                    label 'docker'
+                    args '-v /tmp/maven:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2'
+                }
+            }
             steps {
                 sh '''
                     echo "Running Unit Tests"

@@ -61,6 +61,7 @@ pipeline {
             }
         }
 
+        /*
         stage('Stop Docker Container') {
             steps {
                 sh 'docker ps -f name=microservices-using-spring-boot-service-registry -q | xargs --no-run-if-empty docker container stop'
@@ -75,10 +76,11 @@ pipeline {
                 }
             }
         }
+        */
     }
     post {
         always {
-            echo 'All done!'
+            cleanWs()
         }
     }
 }

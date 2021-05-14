@@ -59,8 +59,10 @@ pipeline {
 
         stage('Build and Deploy on Docker') {
             environment {
+                DOCKER_HUB_ACCESS_KEY = credentials('dockerHub')
             }
             steps {
+                sh 'printenv'
                 sh 'mvn clean package dockerfile:push'
             }
         }

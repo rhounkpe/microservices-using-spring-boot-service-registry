@@ -57,15 +57,21 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy on Docker') {
+        stage('Build') {
             steps {
                 withMaven() {
-                    sh "mvn clean verify"
+                    sh "mvn clean package"
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }
         }
 
-
+        stage('Build and Deploy on Docker') {
+            steps {
+                withMaven() {
+                    sh "mvn dockerfile:push"
+                } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
+            }
+        }
         /*
         stage('Stop Docker Container') {
             steps {

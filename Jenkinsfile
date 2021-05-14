@@ -58,7 +58,11 @@ pipeline {
         }
 
         stage('Build and Deploy on Docker') {
-            sh 'mvn clean package dockerfile:push'
+            environment {
+            }
+            steps {
+                sh 'mvn clean package dockerfile:push'
+            }
         }
 
         stage('Build') {

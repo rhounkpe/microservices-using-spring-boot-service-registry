@@ -6,7 +6,7 @@ pipeline {
     }
 
     options {
-        buildDiscader logRotator(
+        buildDiscarder logRotator(
             daysToKeepStr: '16',
             numToKeepStr: '10'
         )

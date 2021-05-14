@@ -1,5 +1,6 @@
 pipeline {
     /*
+    https://www.youtube.com/watch?v=HaGeSq-SB9E&ab_channel=SzymonStepniak
     environment {
         JAVA_TOOL_OPTIONS = '-Duser.home=/var/maven'
     }
@@ -33,14 +34,16 @@ pipeline {
     }
 
     stages {
-        stage('Cleanup Workspace') {
+        stage ('Initialize') {
             steps {
-                cleanWs()
                 sh '''
-                echo "Cleaned Up Workspace For Project"
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
                 '''
+                sh 'mvn -version'
             }
         }
+
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/develop']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
@@ -55,10 +58,14 @@ pipeline {
             }
         }
 
-        stage('Maven Build') {
+        stage('Build') {
             steps {
-                sh 'mvn -version'
-                sh 'mvn clean install'
+                sh 'mvn -Dmaven.test.failure.ignore=true install'
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
             }
         }
 

@@ -58,11 +58,9 @@ pipeline {
         }
 
         stage('Build and Deploy on Docker') {
-            git url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry'
-            node {
-                withMaven {
-                    maven '3.8.1'
-                  sh "mvn clean verify"
+            steps {
+                withMaven(maven '3.8.1') {
+                    sh "mvn clean verify"
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }
         }

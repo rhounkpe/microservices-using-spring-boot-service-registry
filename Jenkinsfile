@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven '3.8.1'
+    }
+
     options {
         buildDiscarder logRotator(
             daysToKeepStr: '16',
@@ -39,7 +43,8 @@ pipeline {
 
         stage('Maven Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn -version'
+                sh 'mvn clean install'
             }
         }
 

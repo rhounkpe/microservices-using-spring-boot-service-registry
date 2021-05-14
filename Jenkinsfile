@@ -4,6 +4,7 @@ pipeline {
     environment {
         dockerImage = ''
         registry = 'rhounkpe/microservices-using-spring-boot-service-registry'
+        registryCredential = 'dockerHub'
     }
 
     stages {
@@ -22,6 +23,16 @@ pipeline {
             steps {
                 script {
                     dockerImage = docker.build registry
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push()
+                    }
                 }
             }
         }

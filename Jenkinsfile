@@ -32,6 +32,15 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/develop']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
+
+        stage('Unit Testing') {
+            steps {
+                sh '''
+                    echo "Running Unit Tests"
+                '''
+            }
+        }
+
         stage('Maven Build') {
             steps {
                 sh 'mvn clean package'

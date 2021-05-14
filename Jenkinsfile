@@ -58,43 +58,13 @@ pipeline {
         }
 
         stage('Build and Deploy on Docker') {
-            environment {
-                DOCKER_HUB_ACCESS_KEY = credentials('dockerHub')
-            }
-            steps {
-                sh 'printenv'
-                sh 'mvn clean package dockerfile:push'
-            }
+            git url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry'
+            withMaven {
+                maven '3.8.1'
+              sh "mvn clean verify"
+            } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
         }
 
-        stage('Build') {
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install'
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml'
-                }
-            }
-        }
-
-        stage('Build Docker image') {
-            steps {
-                script {
-                    dockerImage = docker.build registry
-                }
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
 
         /*
         stage('Stop Docker Container') {

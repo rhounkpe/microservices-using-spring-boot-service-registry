@@ -59,7 +59,7 @@ pipeline {
 
         stage('Build and Deploy on Docker') {
             git url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry'
-            steps {
+            node {
                 withMaven {
                     maven '3.8.1'
                   sh "mvn clean verify"

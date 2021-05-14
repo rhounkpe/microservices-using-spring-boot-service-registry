@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checkout'
+            }
+        }
         stage('Example') {
             steps {
                 echo 'Hello World'

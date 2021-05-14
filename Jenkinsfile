@@ -1,5 +1,4 @@
 pipeline {
-
     /*
     https://www.youtube.com/watch?v=HaGeSq-SB9E&ab_channel=SzymonStepniak
     agent {
@@ -11,7 +10,7 @@ pipeline {
     }
     */
 
-    agent none
+    agent any
 
     tools {
         maven '3.8.1'
@@ -33,7 +32,6 @@ pipeline {
 
     stages {
         stage ('Initialize') {
-            agent { docker 'maven:3.8.1-adoptopenjdk-11' }
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
@@ -44,14 +42,12 @@ pipeline {
         }
 
         stage('Checkout') {
-            agent any
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/develop']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
 
         stage('Unit Testing') {
-            agent { docker 'maven:3.8.1-adoptopenjdk-11' }
             steps {
                 sh '''
                     echo "Running Unit Tests"
@@ -60,7 +56,6 @@ pipeline {
         }
 
         stage('Build') {
-            agent any
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
@@ -72,7 +67,6 @@ pipeline {
         }
 
         stage('Build Docker image') {
-            agent any
             steps {
                 script {
                     dockerImage = docker.build registry
@@ -81,7 +75,6 @@ pipeline {
         }
 
         stage('Push to Docker Hub') {
-            agent any
             steps {
                 script {
                     docker.withRegistry('', registryCredential) {

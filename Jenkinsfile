@@ -12,6 +12,12 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
+        stage('Maven Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+
         stage('Build Docker image') {
             steps {
                 script {

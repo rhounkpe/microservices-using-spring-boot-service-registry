@@ -2,33 +2,29 @@ pipeline {
     agent any
 
     environment {
-        dockerImage = ''
-        registry = 'rhounkpe/microservices-using-spring-boot-service-registry'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout from SCM') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
         stage('Maven Build') {
             steps {
-                sh "mvn clean package"
+                sh 'mvn clean package'
             }
         }
 
-        stage('Build Docker image') {
+        stage('Build Docker image and Deploy on Docker Hub') {
             steps {
-                script {
-                    dockerImage = docker.build registry
-                }
+                sh 'mvn dockerfile:push'
             }
         }
     }
     post {
         always {
-            echo 'I will always say Hello again!'
+            echo 'All jobs done!'
         }
     }
 }

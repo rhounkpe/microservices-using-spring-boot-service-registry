@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         dockerImage = ''
+        registry = 'rhounkpe/microservices-using-spring-boot-service-registry'
     }
 
     stages {

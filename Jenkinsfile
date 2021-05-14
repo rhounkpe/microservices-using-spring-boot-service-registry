@@ -1,10 +1,7 @@
 pipeline {
-    https://www.youtube.com/watch?v=HaGeSq-SB9E&ab_channel=SzymonStepniak
-    environment {
-        JAVA_TOOL_OPTIONS = '-Duser.home=/var/maven'
-    }
 
     /*
+    https://www.youtube.com/watch?v=HaGeSq-SB9E&ab_channel=SzymonStepniak
     agent {
         docker {
             image 'maven:3.8.1-jdk-11'
@@ -28,6 +25,7 @@ pipeline {
     }
 
     environment {
+        JAVA_TOOL_OPTIONS = '-Duser.home=/var/maven'
         dockerImage = ''
         registry = 'rhounkpe/microservices-using-spring-boot-service-registry'
         registryCredential = 'dockerHub'

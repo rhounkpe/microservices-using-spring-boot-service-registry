@@ -1,5 +1,16 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'develop'
+        }
+    }
+
+    options {
+        buildDiscader logRotator(
+            daysToKeepStr: '16',
+            numToKeepStr: '10'
+        )
+    }
 
     environment {
         dockerImage = ''
@@ -8,9 +19,17 @@ pipeline {
     }
 
     stages {
+        stage('Cleanup Workspace') {
+            steps {
+                cleanWs()
+                sh '''
+                echo "Cleaned Up Workspace For Project"
+                '''
+            }
+        }
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/develop']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
         stage('Maven Build') {

@@ -6,10 +6,6 @@ pipeline {
         }
     }
 
-    tools {
-        maven '3.8.1'
-    }
-
     options {
         buildDiscarder logRotator(
             daysToKeepStr: '16',

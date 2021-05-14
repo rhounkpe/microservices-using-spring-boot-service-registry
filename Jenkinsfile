@@ -57,6 +57,10 @@ pipeline {
             }
         }
 
+        stage('Build and Deploy on Docker') {
+            sh 'mvn clean package dockerfile:push'
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install'

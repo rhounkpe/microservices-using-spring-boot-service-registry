@@ -1,6 +1,23 @@
 pipeline {
     agent any
 
+    tools {
+        maven '3.8.1'
+    }
+
+    options {
+        buildDiscarder logRotator(
+            daysToKeepStr: '16',
+            numToKeepStr: '10'
+        )
+    }
+
+    environment {
+        dockerImage = ''
+        registry = 'rhounkpe/microservices-using-spring-boot-service-registry'
+        registryCredential = 'dockerHub'
+    }
+
     stages {
         stage ('Initialize') {
             steps {
@@ -34,13 +51,29 @@ pipeline {
             }
         }
 
-        stage('Publish on Docker Hub') {
+        stage('Deploy on Docker') {
             steps {
                 withMaven() {
                     sh "mvn dockerfile:push"
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }
         }
+        /*
+        stage('Stop Docker Container') {
+            steps {
+                sh 'docker ps -f name=microservices-using-spring-boot-service-registry -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=microservices-using-spring-boot-service-registry -q | xargs -r docker container rm'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                script {
+                    dockerImage.run("-p 8761:8761 --rm --name microservices-using-spring-boot-service-registry")
+                }
+            }
+        }
+        */
     }
     post {
         always {

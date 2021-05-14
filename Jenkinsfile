@@ -1,14 +1,21 @@
 pipeline {
     agent any
+
+    environment {
+        dockerImage = ''
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub', url: 'https://github.com/rhounkpe/microservices-using-spring-boot-service-registry']]])
             }
         }
-        stage('Example') {
+        stage('Build Docker image') {
             steps {
-                echo 'Hello World'
+                script {
+                    dockerImage = docker.build registry
+                }
             }
         }
     }

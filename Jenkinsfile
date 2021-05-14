@@ -36,6 +36,21 @@ pipeline {
                 }
             }
         }
+
+        stage('Stop Docker Container') {
+            steps {
+                sh 'docker ps -f name=microservices-using-spring-boot-service-registry -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=microservices-using-spring-boot-service-registry -q | xargs -r docker container rm'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                script {
+                    dockerImage.run("-p 8761:8761 --rm --name microservices-using-spring-boot-service-registry")
+                }
+            }
+        }
     }
     post {
         always {

@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy on Docker') {
             steps {
-                withMaven() {
+                withMaven(mavenSettingsConfig: 'MySettings') {
                     sh "mvn dockerfile:push"
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }

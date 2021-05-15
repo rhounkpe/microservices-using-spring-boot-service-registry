@@ -20,6 +20,10 @@ pipeline {
 
     stages {
         stage ('Initialize') {
+            options {
+                timeout(time: 2, unit: 'MINUTES')
+                retry(2)
+            }
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
@@ -42,6 +46,10 @@ pipeline {
         }
 
         stage('Build') {
+            options {
+                timeout(time: 30, unit: 'MINUTES')
+                retry(3)
+            }
             steps {
                 withMaven() {
                     sh 'mvn clean package -DskipTests=true'
@@ -50,6 +58,10 @@ pipeline {
         }
 
         stage('Publish on Docker Hub') {
+            options {
+                timeout(time: 30, unit: 'MINUTES')
+                retry(3)
+            }
             steps {
                 withMaven(mavenSettingsConfig: 'b4653e81-a4c6-4026-a901-c4f745b823cf') {
                     sh 'mvn dockerfile:push'

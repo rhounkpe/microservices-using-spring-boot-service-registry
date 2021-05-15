@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage('Publish on Docker') {
+        stage('Publish on Docker Hub') {
             steps {
                 withMaven(mavenSettingsConfig: 'b4653e81-a4c6-4026-a901-c4f745b823cf') {
                     sh 'mvn dockerfile:push'

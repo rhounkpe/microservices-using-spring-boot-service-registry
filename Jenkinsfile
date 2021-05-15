@@ -68,6 +68,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            when {
+                branch 'develop'
+                environment name: 'DEPLOY_TO', value: 'develop'
+            }
+            steps {
+                echo 'Deploying to dev environment'
+            }
+        }
     }
     post {
         always {

@@ -75,7 +75,7 @@ pipeline {
                 environment name: 'DEPLOY_TO', value: 'develop'
             }
             steps {
-                echo 'Deploying to dev environment'
+                sh 'Deploying to dev environment'
             }
         }
     }

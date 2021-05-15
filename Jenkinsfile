@@ -24,7 +24,7 @@ pipeline {
 
         stage('Unit Testing') {
             steps {
-                sh 'maven clean test'
+                sh 'mvn clean test'
             }
         }
 

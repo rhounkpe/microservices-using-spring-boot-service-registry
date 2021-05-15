@@ -5,6 +5,19 @@ pipeline {
         maven '3.8.1'
     }
 
+    options {
+        // On failure, retry the entire Pipeline the specified number of times.
+        retry(2)
+        // Persist artifacts and console output for the specific number of recent Pipeline runs
+        buildDiscarder(
+            logRotator(numToKeepStr: '1')
+        )
+        // Skip stages once the build status has gone to UNSTABLE
+        skipStagesAfterUnstable()
+        // 	Specify a global execution timeout of one hour, after which Jenkins will abort the Pipeline run.
+        timeout(time: 1, unit: 'HOURS')
+    }
+
     stages {
         stage ('Initialize') {
             steps {

@@ -1,6 +1,13 @@
 server:
   port: 8761
 
+spring:
+  application:
+    name: USER-SERVICE
+
+  cloud:
+    config:
+      enabled: false
 eureka:
   instance:
     hostname: "${HOSTNAME}.eureka"
@@ -10,7 +17,3 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_SERVER_ADDRESS}
 
-spring:
-  cloud:
-    config:
-      enabled: false
